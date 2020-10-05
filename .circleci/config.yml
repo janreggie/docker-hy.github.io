@@ -1,4 +1,12 @@
 version: 2.1
+jobs:
+  heroku-deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - heroku/deploy-via-git
+
 orbs:
   docker: circleci/docker@1.0.0
   heroku: circleci/heroku@1.2.2
@@ -8,8 +16,4 @@ workflows:
       - docker/publish:
           image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
           tag: 'latest'
-      - heroku/default:
-          steps:
-            - checkout
-            - heroku/install
-            - heroku/deploy-via-git
+      - heroku-deploy
